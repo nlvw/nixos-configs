@@ -12,9 +12,9 @@ omitdir=
 
 # Create array
 if [[ -z $omitdir ]]; then
-   cdarray=( "$basedir"/*/ )
+cdarray=( "$basedir"/*/ )
 else
-   cdarray=( "$basedir"/!($omitdir)/ )
+cdarray=( "$basedir"/!($omitdir)/ )
 fi
 
 # remove leading basedir:
@@ -29,7 +29,7 @@ cdarray=( Exit "${cdarray[@]%/}" )
 # You should check that you have at least one directory in there:
 if ((${#cdarray[@]}<=1)); then
     printf 'No subdirectories found. Exiting.\n'
-    exit 0
+    exit 1
 fi
 
 # Display the menu:
@@ -56,8 +56,8 @@ done
 # a valid choice.
 if ((choice==0)); then
     printf 'Good bye.\n'
-    exit 0
+    exit 1
 fi
 
 # Now you can work with subdirectory:
-printf "You chose subdirectory \`%s'. It's a good choice.\n" "${cdarray[choice]}"
+echo "${cdarray[choice]}"
