@@ -1,4 +1,4 @@
-#!/usr/bin/shell bash
+#!/usr/bin/env bash
 
 # Partition Drive (Keeps Nothing!!)
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV}

@@ -1,4 +1,4 @@
-#!/usr/bin/shell bash
+#!/usr/bin/env bash
 
 shopt -s extglob nullglob
 
