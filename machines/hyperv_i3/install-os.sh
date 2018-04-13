@@ -5,8 +5,13 @@ sRoot="${BASH_SOURCE%/*}"
 if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
 sRootName=${sRoot##*/}
 
+# Set Repository Root
+p1="$(dirname "$sRoot")"
+rRoot="$(dirname "$p1")"
+
 # Partition Drive (Keeps Nothing!!)
 printf "Paritioning Hard Drive!\n"
+wipefs -a /dev/sda
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
     # Reset Partion Table
     g # create new gpt partition table
@@ -60,7 +65,7 @@ nixos-generate-config --root /mnt
 
 # Copy nixos-configs repo to root home
 mkdir /mnt/root
-cp -R "rRoot" /mnt/root/nixos-configs
+cp -R "$rRoot" /mnt/root/nixos-configs
 
 # Link System Config Files
 ln -sf "/mnt/root/nixos-configs/machines/${sRootName}/configuration.nix" /mnt/etc/nixos/configuration.nix
