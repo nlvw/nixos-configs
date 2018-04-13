@@ -4,8 +4,11 @@
 sRoot="${BASH_SOURCE%/*}"
 if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
 
+# Source Machine Selection Function
+. "$sRoot/select-machine.sh"
+
 # Select Machine To Install AS
-sMachine=$(bash "${sRoot}/select-machine.sh")
+sMachine=$(machine)
 if [ ! $? == 0 ]; then
     echo "$sMachine"
     exit 1
