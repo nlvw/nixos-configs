@@ -4,7 +4,9 @@ machine() {
 
     shopt -s extglob nullglob
 
-    basedir="$(dirname "$0")/machines"
+    Set Script Root Directory Variable
+    basedir="${BASH_SOURCE%/*}"
+    if [[ ! -d "$basedir" ]]; then basedir="$PWD"; fi
 
     # You may omit the following subdirectories
     # the syntax is that of extended globs, e.g.,
