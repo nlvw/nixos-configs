@@ -49,7 +49,7 @@ EOF
 printf "Formatting Partitions!\n"
 mkfs.vfat -F 32 -n boot /dev/sda1
 mkswap -L swap /dev/sda2
-mkfs.ext4 -L nixos /dev/sda3
+mkfs.ext4-F -L nixos /dev/sda3
 
 # Mount Partitions
 printf "Mounting Partitions!\n"
