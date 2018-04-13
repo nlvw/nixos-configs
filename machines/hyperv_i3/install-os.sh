@@ -6,7 +6,8 @@ if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
 sRootName=${sRoot##*/}
 
 # Partition Drive (Keeps Nothing!!)
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV}
+printf "Paritioning Hard Drive!\n"
+sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
     # Reset Partion Table
     g # create new gpt partition table
 
@@ -40,11 +41,13 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV}
 EOF
 
 # Format Partitions
+printf "Formatting Partitions!\n"
 mkfs.vfat -F 32 -n boot /dev/sda1
 mkswap -L swap /dev/sda2
 mkfs.ext4 -L nixos /dev/sda3
 
 # Mount Partitions
+printf "Mounting Partitions!\n"
 mount /dev/disk/by-label/nixos /mnt
 mkdir /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot

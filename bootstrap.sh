@@ -15,4 +15,4 @@ if [ ! $? == 0 ]; then
 fi
 
 # Kickoff Install Script
-bash "${sRoot}/machines/${sMachine}/install-os.sh"
+bash "${sMachine}/install-os.sh"
