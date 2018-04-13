@@ -11,45 +11,18 @@ rRoot="$(dirname "$p1")"
 
 # Partition Drive (Keeps Nothing!!)
 printf "Paritioning Hard Drive!\n"
-wipefs -a /dev/sda
-sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk /dev/sda
-    # Reset Partion Table
-    g # create new gpt partition table
+parted --script /dev/sda \
+        mklabel gpt \
+        mkpart ESP fat32 1MiB 1GiB name boot set 1 esp on \
+        mkpart primary linux-swap 1GiB 9GiB name swap \
+        mkpart primary ext4 9GiB 100% name nixos
 
-    # Boot Partition
-    n       # new partition
-    3       # partition number
-            # default start location
-    +512M   # partition size
-    t       # change part type
-    1       # UEFI System
-
-    # Swap Partition
-    n       # new partition
-    2       # partition number
-            # default start location
-    +8G     # partition size
-    
-    # Root Partition
-    n       # new partition
-    1       # partition number
-            # default start location
-            # default size (to end of disk)
-
-    # Expert Mode Fixes?
-    x
-    f
-    r
-
-    # Write and Quit
-    w
-EOF
 
 # Format Partitions
-printf "Formatting Partitions!\n"
-mkfs.vfat -F 32 -n boot /dev/sda1
-mkswap -L swap /dev/sda2
-mkfs.ext4-F -L nixos /dev/sda3
+#printf "Formatting Partitions!\n"
+#mkfs.vfat -F 32 -n boot /dev/sda1
+#mkswap -L swap /dev/sda2
+#mkfs.ext4-F -L nixos /dev/sda3
 
 # Mount Partitions
 printf "Mounting Partitions!\n"
