@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Set Script Root Directory and Name Variables
+sRoot="${BASH_SOURCE%/*}"
+if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
+sRootName=${sRoot##*/}
+
 # Partition Drive (Keeps Nothing!!)
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | fdisk ${TGTDEV}
     # Reset Partion Table
@@ -50,11 +55,16 @@ swapon /dev/disk/by-label/swap
 # Generate Configs
 nixos-generate-config --root /mnt
 
-# Link System Config Files
+# Copy nixos-configs repo to root home
+mkdir /mnt/root
+cp -R "rRoot" /mnt/root/nixos-configs
 
+# Link System Config Files
+ln -sf "/mnt/root/nixos-configs/machines/${sRootName}/configuration.nix" /mnt/etc/nixos/configuration.nix
+ln -sf "/mnt/root/nixos-configs/machines/${sRootName}/hardware-configuration.nix" /mnt/etc/nixos/hardware-configuration.nix
 
 # Install System
-#nixos-install
+nixos-install
 
 # Set Root Password
 #install prompts for this
