@@ -1,0 +1,15 @@
+# handle line ending automatically for files detected as text
+# and leave all files detected as binary untouched
+* text=auto
+
+# Force the following filetypes to have unix line endings
+*.* text eol=lf
+
+# Manuall Binary Definiations
+# (binary is a macro for -text -diff)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.ttf binary
+*.otf binary
