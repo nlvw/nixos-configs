@@ -13,16 +13,21 @@ rRoot="$(dirname "$p1")"
 printf "Paritioning Hard Drive!\n"
 parted --script /dev/sda \
         mklabel gpt \
-        mkpart ESP fat32 1MiB 1GiB name boot set 1 esp on \
-        mkpart primary linux-swap 1GiB 9GiB name swap \
-        mkpart primary ext4 9GiB 100% name nixos
+        mkpart ESP fat32 1MiB 1GiB name 1 boot set 1 esp on \
+        mkpart primary linux-swap 1GiB 9GiB name 2 swap \
+        mkpart primary ext4 9GiB 100% name 3 nixos
 
+# Clean Partitions
+printf "Cleaning Partitions!\n"
+wipefs --all --force /dev/sda1
+wipefs --all --force /dev/sda2
+wipefs --all --force /dev/sda3
 
 # Format Partitions
-#printf "Formatting Partitions!\n"
-#mkfs.vfat -F 32 -n boot /dev/sda1
-#mkswap -L swap /dev/sda2
-#mkfs.ext4-F -L nixos /dev/sda3
+printf "Formatting Partitions!\n"
+mkfs.vfat -F 32 -n boot /dev/sda1
+mkswap -L swap /dev/sda2
+mkfs.ext4 -F -L nixos /dev/sda3
 
 # Mount Partitions
 printf "Mounting Partitions!\n"
