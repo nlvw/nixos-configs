@@ -30,13 +30,13 @@ read -rp "Admin/Main User Name: " mUser
 : "${mUser:?"Missing User Name"}"
 
 # Get Admin/Main User Password
-read -srp "Enter Password for '$mUser': " mPass
-read -srp "Repeat Password: " mPass2
-[[ "$mpass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
+read -srp "Enter Password for '$mUser': " mPass; echo
+read -srp "Repeat Password: " mPass2; echo
+[[ "$mPass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Root Password
-read -srp "Enter Desired Root Password: " rPass
-read -srp "Repeat Password: " rPass2
+read -srp "Enter Desired Root Password: " rPass; echo
+read -srp "Repeat Password: " rPass2; echo
 [[ "$rPass" == "$rPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Desired Machine Configuration
@@ -60,8 +60,10 @@ select machine in "${sRoot}/machines"/*; do
 done
 
 # Get Desired Installation Disk (Whole Disk wille be destroyed and then used!!!!)
-devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac)
-select device in $devicelist; do
+clear
+lsblk -dplx size -o name,size,type,mountpoint | grep -Ev "boot|rpmb|loop"
+echo "Please Select The Hardrive to Install To!"
+select device in $(lsblk -dplnx size -o name | grep -Ev "boot|rpmb|loop"); do
 	# leave the loop if the user says 'stop'
 	if [[ "$REPLY" == stop ]]; then 
 			exit 1 
@@ -84,7 +86,7 @@ done
 
 ### Setup the disk and partitions ###
 swap_size=$(free --mebi | awk '/Mem:/ {print $2}')
-swap_end="$( $swap_size + 954 + 1 )MiB"
+swap_end="$(( $swap_size + 954 + 1 ))MiB"
 
 # Partition Drive (Keeps Nothing!!)
 printf "Paritioning Hard Drive!\n"
@@ -112,6 +114,9 @@ mkfs.vfat -F 32 -n boot "${part_boot}"
 mkswap -L swap "${part_swap}"
 mkfs.ext4 -F -L nixos "${part_root}"
 
+# Pause To Prevent Errors In Mounting
+sleep 5s
+
 # Mount Partitions
 printf "Mounting Partitions!\n"
 mount /dev/disk/by-label/nixos /mnt
@@ -138,8 +143,8 @@ if [ -e "${sRoot}/machines/${machine}/hardware_configuration.nix" ]; then
 fi
 
 # Set User Defined Information
-sed -i "s/hName/${hName}/g"
-sed -i "s/mUser/${mUser}/g"
+sed -i "s/hName/${hName}/g" /mnt/etc/nixos/configuration.nix
+sed -i "s/mUser/${mUser}/g" /mnt/etc/nixos/configuration.nix
 
 # Install System
 nixos-install
@@ -149,8 +154,8 @@ nixos-install
 #################################################################################################################
 
 # Set Passwords
-echo "$mUser:$mPass" | chpasswd --root /mnt
-echo "root:$rPass" | chpasswd --root /mnt
+nixos-install --chroot --root /mnt su "$mUser" -c "echo '$mUser:$mPass' | chpasswd --root /mnt"
+nixos-install --chroot --root /mnt su "$mUser" -c "echo 'root:$rPass' | chpasswd --root /mnt"
 
 # Download & Install My Dotfiles
 nixos-install --chroot --root /mnt su "$mUser" -c "git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git"
