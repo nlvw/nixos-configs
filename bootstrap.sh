@@ -157,7 +157,7 @@ nixos-enter -c "echo '$mUser:$mPass' | chpasswd"
 nixos-enter -c "echo 'root:$rPass' | chpasswd"
 
 # Download & Install My Dotfiles
-nixos-enter -c "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
+nixos-enter -c "su '$mUser' -c 'git -c http.sslVerify=false -C ~/ clone https://192.30.253.112/Wolfereign/.dotfiles.git'"
 nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Finished!!
