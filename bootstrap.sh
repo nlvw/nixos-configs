@@ -153,8 +153,8 @@ echo "$mUser:$mPass" | chpasswd --root /mnt
 echo "root:$rPass" | chpasswd --root /mnt
 
 # Download & Install My Dotfiles
-su "$mUser" -c "git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git"
-su "$mUser" -c "bash ~/.dotfiles/bootstrap.sh"
+nixos-install --chroot --root /mnt su "$mUser" -c "git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git"
+nixos-install --chroot --root /mnt su "$mUser" -c "bash ~/.dotfiles/bootstrap.sh"
 
 # Finished!!
 echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
