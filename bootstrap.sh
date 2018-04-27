@@ -22,16 +22,16 @@ sRootName=${sRoot##*/}
 #################################################################################################################
 
 # Get Desired Hostname
-read -rp "Desired Hostname: " hName
+read -rp "Desired Hostname: " hName; echo
 : "${hName:?"Missing hostname"}"
 
 # Get Admin/Main User Name
-read -rp "Admin/Main User Name: " mUser
+read -rp "Admin/Main User Name: " mUser; echo
 : "${mUser:?"Missing User Name"}"
 
 # Get Admin/Main User Password
 read -srp "Enter Password for '$mUser': " mPass; echo
-read -srp "Repeat Password: " mPass2; echo
+read -srp "Repeat Password: " mPass2; echo; echo
 [[ "$mPass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Root Password
@@ -40,7 +40,7 @@ read -srp "Repeat Password: " rPass2; echo
 [[ "$rPass" == "$rPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Desired Machine Configuration
-echo "The following machine profiles were found; select one:"
+echo echo; echo "The following machine profiles were found; select one:"
 PS3="Input Number or 'stop': "
 select machine in "${sRoot}/machines"/*; do
     # leave the loop if the user says 'stop'
@@ -60,9 +60,9 @@ select machine in "${sRoot}/machines"/*; do
 done
 
 # Get Desired Installation Disk (Whole Disk wille be destroyed and then used!!!!)
-clear
+echo; echo; echo
 lsblk -dplx size -o name,size,type,mountpoint | grep -Ev "boot|rpmb|loop"
-echo "Please Select The Hardrive to Install To!"
+echo; echo "Please Select The Hardrive to Install To!"
 select device in $(lsblk -dplnx size -o name | grep -Ev "boot|rpmb|loop"); do
 	# leave the loop if the user says 'stop'
 	if [[ "$REPLY" == stop ]]; then 
