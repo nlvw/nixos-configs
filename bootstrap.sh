@@ -134,11 +134,11 @@ nixos-generate-config --root /mnt
 
 # Copy Machine Configs
 if [ -e "${machine}/configuration.nix" ]; then
-    cp -F "${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+    yes | cp -f "${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
 if [ -e "${machine}/hardware_configuration.nix" ]; then
-    cp -F "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+    yes | cp -f "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
 # Set User Defined Information
@@ -157,8 +157,8 @@ nixos-enter -c "echo '$mUser:$mPass' | chpasswd"
 nixos-enter -c "echo 'root:$rPass' | chpasswd"
 
 # Download & Install My Dotfiles
-nixos-enter "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
-nixos-enter "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
+nixos-enter -c "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
+nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Finished!!
-echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
+echo; echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
