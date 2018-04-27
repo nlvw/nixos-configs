@@ -22,22 +22,22 @@ sRootName=${sRoot##*/}
 #################################################################################################################
 
 # Get Desired Hostname
-read -rp "Desired Hostname: " hostname
-: "${hostname:?"Missing hostname"}"
+read -rp "Desired Hostname: " hName
+: "${hName:?"Missing hostname"}"
 
 # Get Admin/Main User Name
 read -rp "Admin/Main User Name: " mUser
 : "${mUser:?"Missing User Name"}"
 
 # Get Admin/Main User Password
-read -srp "Enter Password for '$user': " uPass
-read -srp "Repeat Password: " uPass2
-[[ "$password" == "$password2" ]] || ( echo "Passwords did not match"; exit 1; )
+read -srp "Enter Password for '$mUser': " mPass
+read -srp "Repeat Password: " mPass2
+[[ "$mpass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Root Password
 read -srp "Enter Desired Root Password: " rPass
 read -srp "Repeat Password: " rPass2
-[[ "$password" == "$password2" ]] || ( echo "Passwords did not match"; exit 1; )
+[[ "$rPass" == "$rPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
 # Get Desired Machine Configuration
 echo "The following machine profiles were found; select one:"
@@ -69,7 +69,7 @@ select device in $devicelist; do
 
 	# complain if no file was selected, and loop to ask again
 	if [[ "$device" == "" ]]; then
-			echo "'$REPLY' is not a valid number" > /dev/stderr
+			echo "'$REPLY' is not a valid number" 
 			continue
 	fi
 
@@ -91,8 +91,8 @@ printf "Paritioning Hard Drive!\n"
 parted --script "${device}" \
         mklabel gpt \
         mkpart ESP fat32 1MiB 954MiB name 1 boot set 1 esp on \
-        mkpart primary linux-swap 954MiB ${swap_end} name 2 swap \
-        mkpart primary ext4 ${swap_end} 100% name 3 nixos
+        mkpart primary linux-swap 954MiB "${swap_end}" name 2 swap \
+        mkpart primary ext4 "${swap_end}" 100% name 3 nixos
 
 # Simple globbing was not enough as on one device I needed to match /dev/mmcblk0p1 
 # but not /dev/mmcblk0boot1 while being able to match /dev/sda1 on other devices.
@@ -129,16 +129,32 @@ swapon /dev/disk/by-label/swap
 nixos-generate-config --root /mnt
 
 # Copy Machine Configs
+if [ -e "${sRoot}/machines/${machine}/configuration.nix" ]; then
+    cp -F "${sRoot}/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+fi
 
+if [ -e "${sRoot}/machines/${machine}/hardware_configuration.nix" ]; then
+    cp -F "${sRoot}/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+fi
+
+# Set User Defined Information
+sed -i "s/hName/${hName}/g"
+sed -i "s/mUser/${mUser}/g"
 
 # Install System
 nixos-install
 
 #################################################################################################################
-# Setup Users
+# Post-Install Tasks
 #################################################################################################################
-# Set Root Password
-#install prompts for this
+
+# Set Passwords
+echo "$mUser:$mPass" | chpasswd --root /mnt
+echo "root:$rPass" | chpasswd --root /mnt
+
+# Download & Install My Dotfiles
+su "$mUser" -c "git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git"
+su "$mUser" -c "bash ~/.dotfiles/bootstrap.sh"
 
 # Finished!!
 echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"

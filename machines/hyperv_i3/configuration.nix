@@ -13,18 +13,18 @@
 	# Localization
 	time.timeZone = "US/Denver";
 	i18n = {
-		consoleFont = "Lat2-Terminus16";
+		consoleFont = "roboto-mono";
 		consoleKeyMap = "us";
 		defaultLocale = "en_US.UTF-8";
 	};
 
 	# Host Name
-	networking.hostName = "zaku"; 
+	networking.hostName = "hName"; 
 
 	# Define user accounts
 	users.users = { 
-		wolfereign = {
-			home = "/home/wolfereign";
+		mUser = {
+			home = "/home/mUser";
 			extraGroups = [ "wheel" "networkmanager" ];
 			isNormalUser = true;
 			uid = 1000;
