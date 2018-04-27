@@ -6,7 +6,7 @@
 
 # Error Handling
 set -uo pipefail
-trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+#trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
 # Logging
 exec 1> >(tee "stdout.log")
@@ -15,7 +15,6 @@ exec 2> >(tee "stderr.log")
 # Set Script Root Directory and Name Variables
 sRoot="${BASH_SOURCE%/*}"
 if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
-sRootName=${sRoot##*/}
 
 #################################################################################################################
 # User Input
@@ -134,12 +133,12 @@ swapon /dev/disk/by-label/swap
 nixos-generate-config --root /mnt
 
 # Copy Machine Configs
-if [ -e "${sRoot}/machines/${machine}/configuration.nix" ]; then
-    cp -F "${sRoot}/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+if [ -e "${machine}/configuration.nix" ]; then
+    cp -F "${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
-if [ -e "${sRoot}/machines/${machine}/hardware_configuration.nix" ]; then
-    cp -F "${sRoot}/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+if [ -e "${machine}/hardware_configuration.nix" ]; then
+    cp -F "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
 # Set User Defined Information
@@ -147,19 +146,19 @@ sed -i "s/hName/${hName}/g" /mnt/etc/nixos/configuration.nix
 sed -i "s/mUser/${mUser}/g" /mnt/etc/nixos/configuration.nix
 
 # Install System
-nixos-install
+nixos-install --no-root-passwd
 
 #################################################################################################################
 # Post-Install Tasks
 #################################################################################################################
 
 # Set Passwords
-nixos-install --chroot --root /mnt su "$mUser" -c "echo '$mUser:$mPass' | chpasswd --root /mnt"
-nixos-install --chroot --root /mnt su "$mUser" -c "echo 'root:$rPass' | chpasswd --root /mnt"
+nixos-enter -c "echo '$mUser:$mPass' | chpasswd"
+nixos-enter -c "echo 'root:$rPass' | chpasswd"
 
 # Download & Install My Dotfiles
-nixos-install --chroot --root /mnt su "$mUser" -c "git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git"
-nixos-install --chroot --root /mnt su "$mUser" -c "bash ~/.dotfiles/bootstrap.sh"
+nixos-enter "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
+nixos-enter "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Finished!!
 echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
