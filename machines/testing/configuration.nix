@@ -48,7 +48,6 @@
 	# Packages
 	nixpkgs.config.allowUnfree = true;
 	environment.systemPackages = with pkgs; [
-		st
 		termite
 		atom
 		#audacity
@@ -76,28 +75,12 @@
 		wget
 	];
 	
-	## Special config
-	nixpkgs.overlays = [ (self: super: {
-	  st = super.st.override {
-	    patches = builtins.map super.fetchurl [
-		{ url = "https://st.suckless.org/patches/dracula/st-dracula-20170803-7f99032.diff"; }
-		{ url = "https://st.suckless.org/patches/alpha/st-alpha-0.8.1.diff"; }
-		{ url = "https://st.suckless.org/patches/clipboard/st-clipboard-20180309-c5ba9c0.diff"; }
-		{ url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.diff"; }
-		{ url = "https://st.suckless.org/patches/scrollback/st-scrollback-mouse-0.8.diff"; }
-		{ url = "https://st.suckless.org/patches/relativeborder/st-relativeborder-20171207-0ac685f.diff"; }
-		{ url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.diff"; }
-	      ];
-	  };
-	}) ];
-
 	# Fonts
 	fonts = {
 		enableFontDir = true;
 		enableGhostscriptFonts = true;
 		fontconfig.enable = true;
 		fonts = with pkgs; [
-			nerdfonts
 			roboto
 			roboto-mono
 		];
