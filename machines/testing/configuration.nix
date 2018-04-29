@@ -46,10 +46,10 @@
 	hardware.pulseaudio.enable = true;
     
 	# Packages
-	nixpkgs.config.allowUnfree = true;
 	nixpkgs.config = {
+		allowUnfree = true;
 		packageOverrides = pkgs: rec {
-		    polybar = pkgs.polybar.override { i3Support = true; }; 
+			polybar = pkgs.polybar.override { i3Support = true; }; 
 		};
 	};
 	
