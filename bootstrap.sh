@@ -157,7 +157,13 @@ nixos-enter -c "echo '$mUser:$mPass' | chpasswd"
 nixos-enter -c "echo 'root:$rPass' | chpasswd"
 
 # Download & Install My Dotfiles
-nixos-enter -c "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
+#nixos-enter -c "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
+#nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
+
+# Workaround Since DNS in chroot doesn't work
+nix-env -i git
+git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/.dotfiles.git
+nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles"
 nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Finished!!
