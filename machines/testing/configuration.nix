@@ -48,7 +48,6 @@
 	# Packages
 	nixpkgs.config.allowUnfree = true;
 	environment.systemPackages = with pkgs; [
-		termite
 		atom
 		#audacity
 		clipit
@@ -61,6 +60,7 @@
 		git
 		imagemagick
 		#libreoffice
+		lxappearance
 		pango
 		polybar
 		psmisc
@@ -68,6 +68,7 @@
 		ranger
 		rofi
 		scrot
+		termite
 		#thunderbird
 		tmux
 		unzip
