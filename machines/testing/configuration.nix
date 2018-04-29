@@ -47,6 +47,12 @@
     
 	# Packages
 	nixpkgs.config.allowUnfree = true;
+	nixpkgs.config = {
+		packageOverrides = pkgs: rec {
+		    polybar = pkgs.polybar.override { i3Support = true; }; 
+		};
+	};
+	
 	environment.systemPackages = with pkgs; [
 		atom
 		#audacity
