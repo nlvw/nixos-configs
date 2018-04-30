@@ -190,7 +190,7 @@ EOF
 
 # Install System
 echo "Installing NixOS!! This will take a while."
-nixos-install
+nixos-install --no-root-password
 
 #################################################################################################################
 # Post-Install Tasks
