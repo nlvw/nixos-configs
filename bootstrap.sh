@@ -16,15 +16,23 @@ sRoot="${BASH_SOURCE%/*}"
 if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
 
 #################################################################################################################
+# Install Needed Setup Packages
+#################################################################################################################
+echo "Pulling Extra Needed Packages!  This may take a while."
+nix-env -i git mkpasswd
+clear
+
+
+#################################################################################################################
 # User Input
 #################################################################################################################
 
 # Get Desired Hostname
-read -rp "Desired Hostname: " hName; echo
+read -rp "Input Desired Hostname: " hName; echo
 : "${hName:?"Missing hostname"}"
 
 # Get Admin/Main User Name
-read -rp "Admin/Main User Name: " mUser; echo
+read -rp "Input Admin/Main User Name: " mUser; echo
 : "${mUser:?"Missing User Name"}"
 
 # Get Admin/Main User Password
@@ -126,11 +134,6 @@ mount /dev/disk/by-label/boot /mnt/boot
 swapon /dev/disk/by-label/swap
 
 #################################################################################################################
-# Install Needed Setup Packages
-#################################################################################################################
-nix-env -i git mkpasswd
-
-#################################################################################################################
 # Setup Configuration Files
 #################################################################################################################
 
@@ -167,10 +170,14 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 	# force user/group management to be immutable (this file)
 	users.mutableUsers = false;
 
+	# Root
+	users.users.root = {
+		hashedPassword = $(mkpasswd -m sha-512 "$rPass");
+	}
+
 	# Main user generated from bootstrap.sh
 	users.users.${mUser} = {
 		isNormalUser = true;
-		home = "/home/${mUser}";
 		description = "Main System User";
 		extraGroupps = [ "wheel" "networkmanager"];
 		uid = 1000;
@@ -184,21 +191,13 @@ EOF
 #################################################################################################################
 
 # Install System
-nixos-install --no-root-passwd
+nixos-install
 
 #################################################################################################################
 # Post-Install Tasks
 #################################################################################################################
 
-# Set Passwords
-nixos-enter -c "echo '$mUser:$mPass' | chpasswd"
-nixos-enter -c "echo 'root:$rPass' | chpasswd"
-
 # Download & Install My Dotfiles
-#nixos-enter -c "su '$mUser' -c 'git -C ~/ clone https://github.com/Wolfereign/.dotfiles.git'"
-#nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
-
-# Workaround Since DNS in chroot doesn't work
 git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/.dotfiles.git
 nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles'"
 nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
