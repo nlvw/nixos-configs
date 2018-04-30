@@ -37,9 +37,14 @@
 	hardware.pulseaudio.enable = true;
     
 	# Packages
-	nixpkgs.config.allowUnfree = true;
+	nixpkgs.config = {
+		allowUnfree = true;
+		packageOverrides = pkgs: rec {
+			polybar = pkgs.polybar.override { i3Support = true; }; 
+		};
+	};
+	
 	environment.systemPackages = with pkgs; [
-		alacritty
 		atom
 		#audacity
 		clipit
@@ -52,6 +57,7 @@
 		git
 		imagemagick
 		#libreoffice
+		lxappearance
 		pango
 		polybar
 		psmisc
@@ -59,20 +65,20 @@
 		ranger
 		rofi
 		scrot
+		termite
 		#thunderbird
 		tmux
 		unzip
 		vim
 		wget
 	];
-		
+	
 	# Fonts
 	fonts = {
 		enableFontDir = true;
 		enableGhostscriptFonts = true;
 		fontconfig.enable = true;
 		fonts = with pkgs; [
-			nerdfonts
 			roboto
 			roboto-mono
 		];
