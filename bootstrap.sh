@@ -54,6 +54,7 @@ select machine in "${sRoot}/machines"/*; do
     fi
 
     # now we can return the selected folder
+    machine=$(basename "$machine")
     echo "$machine"
     break
 done
@@ -126,24 +127,58 @@ mount /dev/disk/by-label/boot /mnt/boot
 swapon /dev/disk/by-label/swap
 
 #################################################################################################################
-# Install NixOS
+# Setup Configuration Files
 #################################################################################################################
 
 # Generate Configs
 nixos-generate-config --root /mnt
 
-# Copy Machine Configs
-if [ -e "${machine}/configuration.nix" ]; then
-    yes | cp -f "${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+# Copy Repo To Installation
+mkdir /mnt/etc/nixos/nixos-configs
+chmod -R 700 /mnt/etc/nixos/nixos-configs
+cp -r ./* /mnt/etc/nixos/nixos-configs/
+
+# Link configuration.nix
+if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" ]; then
+    ln -s "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
-if [ -e "${machine}/hardware_configuration.nix" ]; then
-    yes | cp -f "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+# Link hardware_configuration.nix
+if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" ]; then
+    ln -s "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
-# Set User Defined Information
-sed -i "s/hName/${hName}/g" /mnt/etc/nixos/configuration.nix
-sed -i "s/mUser/${mUser}/g" /mnt/etc/nixos/configuration.nix
+# Create hostname.nix
+cat << EOF > /mnt/etc/nixos/nixos-configs/private/hostname.nix
+{ config, ... }:
+{
+	# Host Name
+	networking.hostName = "$hName";
+}
+EOF
+
+# Create users.nix
+cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
+{ config, ... }:
+{
+	# force user/group management to be immutable (this file)
+	users.mutableUsers = false;
+
+	# Main user generated from bootstrap.sh
+	users.users.${mUser} = {
+		isNormalUser = true;
+		home = "/home/${mUser}";
+		description = "Main System User";
+		extraGroupps = [ "wheel" "networkmanager"];
+		uid = 1000;
+		hashedPassword = $(mkpasswd -m sha-512 "$mPass");
+	};
+}
+EOF
+
+#################################################################################################################
+# Install NixOS
+#################################################################################################################
 
 # Install System
 nixos-install --no-root-passwd
