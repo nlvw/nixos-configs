@@ -24,11 +24,56 @@
 
 	# Networking (Hostname Imported from hostname.nix)
 	networking.networkmanager.enable = true;
-	
+        
+	# i3-gaps / lightdm
+	services.xserver.enable = true;
+	services.xserver.layout = "us";
+	services.xserver.libinput.enable = true; # touchpad support
+	services.xserver.displayManager.lightdm.enable = true;
+	services.xserver.windowManager = {
+		i3 = { enable = true; package = pkgs.i3-gaps; };
+		default = "none+i3";
+	};
+    
+	# Enable Sound
+	sound.enable = true;
+	hardware.pulseaudio.enable = true;
+    
 	# Packages
+	nixpkgs.config = {
+		allowUnfree = true;
+		packageOverrides = pkgs: rec {
+			polybar = pkgs.polybar.override { i3Support = true; }; 
+		};
+	};
+	
 	environment.systemPackages = with pkgs; [
+		atom
+		audacity
+		clipit
+		compton
+		deluge
+		discord
+		feh
+		firefox
+		gimp
 		git
+		google-chrome
+		imagemagick
+		libreoffice
+		lxappearance
+		networkmanagerapplet
+		obs-studio
+		pango
+		polybar
+		psmisc
+		qutebrowser
 		ranger
+		rofi
+		scrot
+		steam-run
+		termite
+		thunderbird
 		tmux
 		unzip
 		vim
@@ -41,6 +86,7 @@
 		enableGhostscriptFonts = true;
 		fontconfig.enable = true;
 		fonts = with pkgs; [
+			roboto
 			roboto-mono
 		];
 	};
@@ -52,11 +98,12 @@
 	programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
  
 	# Additional Services/Daemons (also installs?)
-	services.openssh.enable = true;
+	#services.openssh.enable = true;
+	services.printing.enable = true; # uses CUPS
 
 	# Firewall
 	networking.firewall.enable = true;
-	networking.firewall.allowedTCPPorts = [ 22 ];
+	#networking.firewall.allowedTCPPorts = [ 22 ];
 	#networking.firewall.allowedUDPPorts = [ ...];
     
 	# This value determines the NixOS release with which your system is to be

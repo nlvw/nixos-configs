@@ -21,52 +21,14 @@
 		consoleKeyMap = "us";
 		defaultLocale = "en_US.UTF-8";
 	};
-        
-	# i3-gaps / lightdm
-	services.xserver.enable = true;
-	services.xserver.layout = "us";
-	services.xserver.libinput.enable = true; # touchpad support
-	services.xserver.displayManager.lightdm.enable = true;
-	services.xserver.windowManager = {
-		i3 = { enable = true; package = pkgs.i3-gaps; };
-		default = "i3";
-	};
-    
-	# Enable Sound
-	sound.enable = true;
-	hardware.pulseaudio.enable = true;
-    
-	# Packages
-	nixpkgs.config = {
-		allowUnfree = true;
-		packageOverrides = pkgs: rec {
-			polybar = pkgs.polybar.override { i3Support = true; }; 
-		};
-	};
+
+	# Networking (Hostname Imported from hostname.nix)
+	networking.networkmanager.enable = true;
 	
+	# Packages
 	environment.systemPackages = with pkgs; [
-		atom
-		#audacity
-		clipit
-		compton
-		deluge
-		#discord
-		feh
-		firefox
-		#gimp
 		git
-		imagemagick
-		#libreoffice
-		lxappearance
-		pango
-		polybar
-		psmisc
-		qutebrowser
 		ranger
-		rofi
-		scrot
-		termite
-		#thunderbird
 		tmux
 		unzip
 		vim
@@ -79,7 +41,6 @@
 		enableGhostscriptFonts = true;
 		fontconfig.enable = true;
 		fonts = with pkgs; [
-			roboto
 			roboto-mono
 		];
 	};
@@ -92,7 +53,6 @@
  
 	# Additional Services/Daemons (also installs?)
 	services.openssh.enable = true;
-	services.printing.enable = true; # uses CUPS
 
 	# Firewall
 	networking.firewall.enable = true;
