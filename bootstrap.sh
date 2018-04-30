@@ -5,12 +5,11 @@
 #################################################################################################################
 
 # Error Handling
-#set -uo pipefail
-#trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+set -uo pipefail
 
 # Logging
-#exec 1> >(tee "stdout.log")
-#exec 2> >(tee "stderr.log")
+exec 1> >(tee "stdout.log")
+exec 2> >(tee "stderr.log")
 
 # Set Script Root Directory and Name Variables
 sRoot="${BASH_SOURCE%/*}"
