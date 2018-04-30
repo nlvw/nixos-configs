@@ -48,7 +48,7 @@ read -srp "Repeat Password: " rPass2; echo
 # Get Desired Machine Configuration
 echo; echo; echo "The following machine profiles were found; select one:"
 PS3="Input Number or 'stop': "
-select machine in "${sRoot}/machines"/*; do
+select machine in basic portland shuttle-ds81 testing zaku; do
     # leave the loop if the user says 'stop'
     if [[ "$REPLY" == stop ]]; then 
         exit 1 
@@ -61,7 +61,6 @@ select machine in "${sRoot}/machines"/*; do
     fi
 
     # now we can return the selected folder
-    machine=$(basename "$machine")
     echo "$machine"
     break
 done
