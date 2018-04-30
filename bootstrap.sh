@@ -145,12 +145,12 @@ chmod -R 700 /mnt/etc/nixos/nixos-configs
 
 # Link configuration.nix
 if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" ]; then
-    ln -s "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+    ln -sf "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
 # Link hardware_configuration.nix
 if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" ]; then
-    ln -s "${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+    ln -sf "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
 # Create hostname.nix
@@ -171,16 +171,16 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 
 	# Root
 	users.users.root = {
-		hashedPassword = $(mkpasswd -m sha-512 "$rPass");
-	}
+		hashedPassword = "$(mkpasswd -m sha-512 "$rPass")";
+	};
 
 	# Main user generated from bootstrap.sh
 	users.users.${mUser} = {
 		isNormalUser = true;
 		description = "Main System User";
-		extraGroupps = [ "wheel" "networkmanager"];
+		extraGroups = [ "wheel" "networkmanager" ];
 		uid = 1000;
-		hashedPassword = $(mkpasswd -m sha-512 "$mPass");
+		hashedPassword = "$(mkpasswd -m sha-512 "$mPass")";
 	};
 }
 EOF
@@ -190,6 +190,7 @@ EOF
 #################################################################################################################
 
 # Install System
+echo "Installing NixOS!! This will take a while."
 nixos-install
 
 #################################################################################################################
@@ -197,6 +198,7 @@ nixos-install
 #################################################################################################################
 
 # Download & Install My Dotfiles
+echo "Downloading & Installing dotfiles for ${mUser}."
 git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/.dotfiles.git
 nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles'"
 nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
