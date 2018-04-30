@@ -177,7 +177,6 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 	# Main user generated from bootstrap.sh
 	users.users.${mUser} = {
 		isNormalUser = true;
-		description = "Main System User";
 		extraGroups = [ "wheel" "networkmanager" ];
 		uid = 1000;
 		hashedPassword = "$(mkpasswd -m sha-512 "$mPass")";
