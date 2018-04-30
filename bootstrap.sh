@@ -126,6 +126,11 @@ mount /dev/disk/by-label/boot /mnt/boot
 swapon /dev/disk/by-label/swap
 
 #################################################################################################################
+# Install Needed Setup Packages
+#################################################################################################################
+nix-env -i git mkpasswd
+
+#################################################################################################################
 # Setup Configuration Files
 #################################################################################################################
 
@@ -133,9 +138,8 @@ swapon /dev/disk/by-label/swap
 nixos-generate-config --root /mnt
 
 # Copy Repo To Installation
-mkdir /mnt/etc/nixos/nixos-configs
+git -C /mnt/etc/nixos/ clone https://github.com/Wolfereign/nixos-configs.git
 chmod -R 700 /mnt/etc/nixos/nixos-configs
-cp -r ./* /mnt/etc/nixos/nixos-configs/
 
 # Link configuration.nix
 if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" ]; then
@@ -195,9 +199,8 @@ nixos-enter -c "echo 'root:$rPass' | chpasswd"
 #nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Workaround Since DNS in chroot doesn't work
-nix-env -i git
 git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/.dotfiles.git
-nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles"
+nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles'"
 nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
 
 # Finished!!
