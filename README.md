@@ -2,7 +2,7 @@
 
 My Config Files For Various NixOS Deployments
 
-## Pull Repo and Unpack
+## Pull bootstrap.sh & Run Script
 
 ```bash
 curl -OLk https://git.io/vpRbJ
