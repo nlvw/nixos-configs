@@ -11,17 +11,12 @@ set -uo pipefail
 exec 1> >(tee "stdout.log")
 exec 2> >(tee "stderr.log")
 
-# Set Script Root Directory and Name Variables
-sRoot="${BASH_SOURCE%/*}"
-if [[ ! -d "$sRoot" ]]; then sRoot="$PWD"; fi
-
 #################################################################################################################
 # Install Needed Setup Packages
 #################################################################################################################
 echo "Pulling Extra Needed Packages!  This may take a while."
 nix-env -i git mkpasswd
 clear
-
 
 #################################################################################################################
 # User Input
