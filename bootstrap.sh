@@ -5,15 +5,9 @@
 #################################################################################################################
 
 # Error Handling
-set -uo pipefail
+set -euo pipefail
 
-# Logging
-exec 1> >(tee "stdout.log")
-exec 2> >(tee "stderr.log")
-
-#################################################################################################################
 # Install Needed Setup Packages
-#################################################################################################################
 echo "Pulling Extra Needed Packages!  This may take a while."
 nix-env -i git mkpasswd
 clear
@@ -21,6 +15,8 @@ clear
 #################################################################################################################
 # User Input
 #################################################################################################################
+
+echo "Collecting Information From The User!!"
 
 # Get Desired Hostname
 read -rp "Input Desired Hostname: " hName; echo
