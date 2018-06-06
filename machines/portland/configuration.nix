@@ -60,11 +60,50 @@
 	};
 
 	# Additional Services/Daemons (also installs?)
-	services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    ports = 8668;
+    permitRootLogin = "no";
+    passwordAuthentication = false;
+    extraConfig = "
+      # Allow Local Lan to login with password authentication
+      Match address 192.168.8.0/24
+        PasswordAuthentication yes
+    ";
+  };
+
+  services.fail2ban = {
+    enable = true;
+    jails.DEFAULT = ''bantime = 3600'';
+    jails.sshd = ''
+      filter = sshd
+      maxretry = 4
+      action = iptables[name=ssh, port=8668, protocol=tcp]
+      enabled = true
+    '';
+    jails.sshd-dos = ''
+      filter = sshd-ddos
+      maxretry = 2
+      action = iptables[name=ssh, port=8668, protocol=tcp]
+      enabled = true
+    '';
+    jails.port-scan = ''
+      filter = port-scan
+      action = iptables-allports[name=port-scan]
+      maxretry = 2
+      bantime = 7200
+      enabled = true
+    '';
+  };
+
+  environment.etc."fail2ban/filter.d/port-scan.conf".text = ''
+    [Definition]
+    failregex = rejected connection: .* SRC=<HOST>
+  '';
 
 	# Firewall
 	networking.firewall.enable = true;
-	networking.firewall.allowedTCPPorts = [ 22 ];
+	networking.firewall.allowedTCPPorts = [ 8668 ];
 	#networking.firewall.allowedUDPPorts = [ ...];
     
 	# This value determines the NixOS release with which your system is to be
