@@ -5,8 +5,8 @@ My Config Files For Various NixOS Deployments
 ## Pull bootstrap.sh & Run Script
 
 ```bash
-curl -OLk https://git.io/vpRbJ
-bash vpRbJ
+curl -OLk https://gitlab.com/Wolfereign/nixos-configs/raw/master/bootstrap.sh
+bash bootstrap.sh
 ```
 
 ## To-Do
