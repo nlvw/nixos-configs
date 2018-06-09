@@ -6,14 +6,21 @@
 	# paths in nix expressions are always relative the file which defines them
 	imports = [ 
 		../../../hardware-configuration.nix
-		../../private/hostname.nix
 		../../private/users.nix
 	];
 				
 	# Boot Loader
 	boot.loader.systemd-boot.enable = true;
 	boot.loader.efi.canTouchEfiVariables = true;
+	
+	# ZFS File System
 	boot.supportedFilesystems = [ "zfs" ];
+	boot.zfs = {
+		extraPools = [ "vpool" ];
+		forceImportRoot = false;
+		forceImportAll = false;
+	};
+	services.zfs.autoScrub.enable = true;
 		
 	# Localization
 	time.timeZone = "US/Denver";
@@ -23,7 +30,10 @@
 		defaultLocale = "en_US.UTF-8";
 	};
 
-	# Networking (Hostname Imported from hostname.nix)
+	# Host Name
+	networking.hostName = "portland";
+
+	# Networking
 	networking.networkmanager.enable = true;
 	
 	# Packages
@@ -39,10 +49,16 @@
 	# Fonts
 	fonts = {
 		enableFontDir = true;
-		enableGhostscriptFonts = true;
-		fontconfig.enable = true;
+		fontconfig {
+			enable = true;
+			defaultFonts.monospace = [ "roboto-mono" ];
+			defaultFonts.sansSerif = [ "roboto" ];
+			defaultFonts.serif = [ "roboto-slab" ];
+		};
 		fonts = with pkgs; [
+			roboto
 			roboto-mono
+			roboto-slab
 		];
 	};
 						
@@ -52,14 +68,7 @@
 	programs.mtr.enable = true;
 	programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
-	# Docker Configuration
-	virtualisation.docker = {
-		enable = true;
-		enableOnBoot = true;
-		extraOptions = "-g /vpool/docker";
-	};
-
-	# Additional Services/Daemons (also installs?)
+	# OpenSSH Service
   services.openssh = {
     enable = true;
     ports = 8668;
@@ -72,6 +81,7 @@
     ";
   };
 
+	# Fail2ban Service
   services.fail2ban = {
     enable = true;
     jails.DEFAULT = ''bantime = 3600'';
@@ -100,6 +110,13 @@
     [Definition]
     failregex = rejected connection: .* SRC=<HOST>
   '';
+
+	# Docker Service
+	virtualisation.docker = {
+		enable = true;
+		enableOnBoot = true;
+		extraOptions = "-g /vpool/docker";
+	};
 
 	# Firewall
 	networking.firewall.enable = true;
