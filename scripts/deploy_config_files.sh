@@ -25,16 +25,12 @@ select machine in basic portland shuttle-ds81 testing zaku; do
 	break
 done
 
-# Copy Repo To Installation
-mkdir /mnt/etc/n
-chmod -R 700 /mnt/etc/nixos/nixos-configs
-
-# Link configuration.nix
+# Copy configuration.nix
 if [ -e "../machines/${machine}/configuration.nix" ]; then
     cp -f "../machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
-# Link hardware_configuration.nix
+# Copy hardware_configuration.nix
 if [ -e "../machines/${machine}/hardware_configuration.nix" ]; then
     cp -f "../machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
