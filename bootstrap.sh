@@ -1,42 +1,12 @@
 #!/usr/bin/env bash
 
-#################################################################################################################
-# Script Setup Tasks
-#################################################################################################################
-
 # Error Handling
 set -euo pipefail
 
-# Install Needed Setup Packages
-echo "Pulling Extra Needed Packages!  This may take a while."
-nix-env -i git mkpasswd
-clear
-
 #################################################################################################################
-# User Input
-#################################################################################################################
-
-echo "Collecting Information From The User!!"
-
-# Get Desired Hostname
-read -rp "Input Desired Hostname: " hName; echo
-: "${hName:?"Missing hostname"}"
-
-# Get Admin/Main User Name
-read -rp "Input Admin/Main User Name: " mUser; echo
-: "${mUser:?"Missing User Name"}"
-
-# Get Admin/Main User Password
-read -srp "Enter Password for '$mUser': " mPass; echo
-read -srp "Repeat Password: " mPass2; echo; echo
-[[ "$mPass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
-
-# Get Root Password
-read -srp "Enter Desired Root Password: " rPass; echo
-read -srp "Repeat Password: " rPass2; echo
-[[ "$rPass" == "$rPass2" ]] || ( echo "Passwords did not match"; exit 1; )
-
 # Get Desired Machine Configuration
+#################################################################################################################
+
 echo; echo; echo "The following machine profiles were found; select one:"
 PS3="Input Number or 'stop': "
 select machine in basic portland shuttle-ds81 testing zaku; do
@@ -55,6 +25,10 @@ select machine in basic portland shuttle-ds81 testing zaku; do
     echo "$machine"
     break
 done
+
+#################################################################################################################
+# Partition, Format, & Mount OS Disk
+#################################################################################################################
 
 # Get Desired Installation Disk (Whole Disk wille be destroyed and then used!!!!)
 echo; echo; echo
@@ -77,11 +51,7 @@ select device in $(lsblk -dplnx size -o name | grep -Ev "boot|rpmb|loop"); do
 	break
 done
 
-#################################################################################################################
-# Partition, Format, & Mount OS Disk
-#################################################################################################################
-
-### Setup the disk and partitions ###
+# Calculate Swap Size
 swap_size=$(free --mebi | awk '/Mem:/ {print $2}')
 swap_end="$(( $swap_size + 954 + 1 ))MiB"
 
@@ -124,6 +94,15 @@ mount /dev/disk/by-label/boot /mnt/boot
 swapon /dev/disk/by-label/swap
 
 #################################################################################################################
+# Script Setup Tasks
+#################################################################################################################
+
+# Install Needed Setup Packages
+echo "Pulling Extra Needed Packages!  This may take a while."
+nix-env -i git mkpasswd
+clear
+
+#################################################################################################################
 # Setup Configuration Files
 #################################################################################################################
 
@@ -131,7 +110,7 @@ swapon /dev/disk/by-label/swap
 nixos-generate-config --root /mnt
 
 # Copy Repo To Installation
-git -C /mnt/etc/nixos/ clone https://github.com/Wolfereign/nixos-configs.git
+git -C /mnt/etc/nixos/ clone https://gitlab.com/Wolfereign/nixos-configs.git
 chmod -R 700 /mnt/etc/nixos/nixos-configs
 
 # Link configuration.nix
@@ -144,16 +123,24 @@ if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration
     ln -sf "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
-# Create hostname.nix
-cat << EOF > /mnt/etc/nixos/nixos-configs/private/hostname.nix
-{ config, ... }:
-{
-	# Host Name
-	networking.hostName = "$hName";
-}
-EOF
+#################################################################################################################
+# Setup Root & Users
+#################################################################################################################
 
-# Create users.nix
+# Get Root Password
+read -srp "Enter Desired Root Password: " rPass; echo
+read -srp "Repeat Password: " rPass2; echo
+[[ "$rPass" == "$rPass2" ]] || ( echo "Passwords did not match"; exit 1; )
+
+# Get Admin/Main User Name
+read -rp "Input Admin/Main User Name: " mUser; echo
+: "${mUser:?"Missing User Name"}"
+
+# Get Admin/Main User Password
+read -srp "Enter Password for '$mUser': " mPass; echo
+read -srp "Repeat Password: " mPass2; echo; echo
+[[ "$mPass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
+
 cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 { config, ... }:
 {
@@ -175,6 +162,7 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 }
 EOF
 
+
 #################################################################################################################
 # Install NixOS
 #################################################################################################################
@@ -189,9 +177,9 @@ nixos-install --no-root-passwd
 
 # Download & Install My Dotfiles
 echo "Downloading & Installing dotfiles for ${mUser}."
-git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/.dotfiles.git
-nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/.dotfiles'"
-nixos-enter -c "su '$mUser' -c 'bash ~/.dotfiles/bootstrap.sh'"
+git -C "/mnt/home/${mUser}/" clone https://gitlab.com/Wolfereign/dotfiles.git
+nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/dotfiles'"
+nixos-enter -c "su '$mUser' -c 'bash ~/dotfiles/bootstrap.sh'"
 
 # Finished!!
 echo; echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
