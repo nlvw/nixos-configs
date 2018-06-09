@@ -3,9 +3,13 @@
 # Error Handling
 set -euo pipefail
 
+# Install Needed Packages
+echo "Installing needed packages; this could take a while."
+nix-env -i mkpasswd
+
 # Create Lockdowned Folder
-mkdir /mnt/etc/private
-chmod -R 700 /mnt/etc/private
+mkdir /mnt/etc/nixos/private
+chmod -R 700 /mnt/etc/nixos/private
 
 # Get Root Password
 read -srp "Enter Desired Root Password: " rPass; echo
