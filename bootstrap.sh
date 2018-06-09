@@ -7,23 +7,23 @@ set -euo pipefail
 # Get Desired Machine Configuration
 #################################################################################################################
 
-echo; echo; echo "The following machine profiles were found; select one:"
+echo "The following machine profiles were found; select one:"
 PS3="Input Number or 'stop': "
 select machine in basic portland shuttle-ds81 testing zaku; do
-    # leave the loop if the user says 'stop'
-    if [[ "$REPLY" == stop ]]; then 
-        exit 1 
-    fi
+	# leave the loop if the user says 'stop'
+	if [[ "$REPLY" == stop ]]; then 
+		exit 1 
+	fi
 
-    # complain if no file was selected, and loop to ask again
-    if [[ "$machine" == "" ]]; then
-        echo "'$REPLY' is not a valid number"
-        continue
-    fi
+	# complain if no file was selected, and loop to ask again
+	if [[ "$machine" == "" ]]; then
+		echo "'$REPLY' is not a valid number"
+		continue
+	fi
 
-    # now we can return the selected folder
-    echo "$machine"
-    break
+	# now we can return the selected folder
+	echo "$machine"
+	break
 done
 
 #################################################################################################################
@@ -100,7 +100,6 @@ swapon /dev/disk/by-label/swap
 # Install Needed Setup Packages
 echo "Pulling Extra Needed Packages!  This may take a while."
 nix-env -i git mkpasswd
-clear
 
 #################################################################################################################
 # Setup Configuration Files
