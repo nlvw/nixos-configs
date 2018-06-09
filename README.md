@@ -9,6 +9,13 @@ curl -OLk https://gitlab.com/Wolfereign/nixos-configs/raw/master/bootstrap.sh
 bash bootstrap.sh
 ```
 
+or 
+
+```bash
+curl -OLk https://gitlab.com/Wolfereign/nixos-configs/-/archive/master/nixos-configs-master.tar.gz
+tar -zxvf nixos-configs-master.tar.gz
+```
+
 ## To-Do
 
 - Make Re-Formatting Optional
