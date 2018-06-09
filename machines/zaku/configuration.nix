@@ -86,7 +86,7 @@
 	# Fonts
 	fonts = {
 		enableFontDir = true;
-		fontconfig {
+		fontconfig = {
 			enable = true;
 			defaultFonts.monospace = [ "roboto-mono" ];
 			defaultFonts.sansSerif = [ "roboto" ];

@@ -32,6 +32,7 @@
 
 	# Host Name
 	networking.hostName = "portland";
+	networking.hostId = "8425e349";
 
 	# Networking
 	networking.networkmanager.enable = true;
@@ -49,7 +50,7 @@
 	# Fonts
 	fonts = {
 		enableFontDir = true;
-		fontconfig {
+		fontconfig = {
 			enable = true;
 			defaultFonts.monospace = [ "roboto-mono" ];
 			defaultFonts.sansSerif = [ "roboto" ];
@@ -71,7 +72,7 @@
 	# OpenSSH Service
   services.openssh = {
     enable = true;
-    ports = 8668;
+    ports = [ 8668 ];
     permitRootLogin = "no";
     passwordAuthentication = false;
     extraConfig = "
