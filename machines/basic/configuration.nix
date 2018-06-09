@@ -22,7 +22,10 @@
 		defaultLocale = "en_US.UTF-8";
 	};
 
-	# Networking (Hostname Imported from hostname.nix)
+	# Host Name
+	networking.hostName = "nixos-basic";
+
+	# Networking
 	networking.networkmanager.enable = true;
 	
 	# Packages
@@ -38,10 +41,16 @@
 	# Fonts
 	fonts = {
 		enableFontDir = true;
-		enableGhostscriptFonts = true;
-		fontconfig.enable = true;
+		fontconfig {
+			enable = true;
+			defaultFonts.monospace = [ "roboto-mono" ];
+			defaultFonts.sansSerif = [ "roboto" ];
+			defaultFonts.serif = [ "roboto-slab" ];
+		};
 		fonts = with pkgs; [
+			roboto
 			roboto-mono
+			roboto-slab
 		];
 	};
 						
