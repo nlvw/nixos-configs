@@ -3,6 +3,11 @@
 # Error Handling
 set -euo pipefail
 
+# Get Repository Root
+If [ ! -v RepoRoot ]; then
+    RepoRoot="$(dirname "$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)")"
+fi
+
 # Install Additional Tools
 echo "Installing 'git' if package is missing."
 nix-env -i git
@@ -12,7 +17,7 @@ nixos-generate-config --root /mnt
 
 # Get Desired Machine Configuration
 echo "The following machine profiles were found; select one:"
-select machine in ./machines/*/
+select machine in "$RepoRoot"/machines/*/; do break; done
 
 # Clone nixos-configs Repository To Installation
 git -C /mnt/etc/nixos/ clone https://gitlab.com/Wolfereign/nixos-configs.git

@@ -3,16 +3,17 @@
 # Error Handling
 set -euo pipefail
 
-# Get Directory of Running Script
-sroot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get Repository Root
+RepoRoot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Partition, Format, & Mount OS Disk
 read -p "Do you want to format and mount the BOOT disk? This will erase the disk. (y/n) " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	select fbd in "${sroot}/scripts/format-boot_disk-*.sh"; do
+	select fbd in "$RepoRoot"/scripts/format-boot_disk-*.sh; do
 		. "$fbd"
+		break
 	done
 else
 	echo "Skipping Partitioning/Mounting"
@@ -25,12 +26,13 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	# Deploy Configuration Files
-	. "${sroot}/scripts/deploy-config_files.sh"
+	. "${RepoRoot}/scripts/deploy-config_files.sh"
 
 	# Generate users.nix (if custom config files were deployed)
 	echo "Select users.nix to generate."
-	select usrnix in "${sroot}/scripts/generate-users-*.sh"; do
+	select usrnix in "$RepoRoot"/scripts/generate-users-*.sh; do
 		. "$usrnix"
+		break
 	done
 
 	# Install System

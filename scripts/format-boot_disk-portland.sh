@@ -3,11 +3,13 @@
 # Error Handling
 set -euo pipefail
 
-# Get Directory of Running Script
-ssroot="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get Repository Root
+If [ ! -v RepoRoot ]; then
+    RepoRoot="$(dirname "$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)")"
+fi
 
 # Run Basic Format/Mounting For Boot Drive
-. "${ssroot}/format-boot_disk-basic.sh"
+. "${RepoRoot}/scripts/format-boot_disk-basic.sh"
 
 # Mount BTRFS Raid/Pool
 btrfs device scan
