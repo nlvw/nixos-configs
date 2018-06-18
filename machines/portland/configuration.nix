@@ -12,15 +12,6 @@
 	# Boot Loader
 	boot.loader.systemd-boot.enable = true;
 	boot.loader.efi.canTouchEfiVariables = true;
-	
-	# ZFS File System
-	boot.supportedFilesystems = [ "zfs" ];
-	boot.zfs = {
-		extraPools = [ "vpool" ];
-		forceImportRoot = false;
-		forceImportAll = false;
-	};
-	services.zfs.autoScrub.enable = true;
 		
 	# Localization
 	time.timeZone = "US/Denver";
@@ -116,7 +107,7 @@
 	virtualisation.docker = {
 		enable = true;
 		enableOnBoot = true;
-		extraOptions = "-g /vpool/docker";
+		extraOptions = "-g /butters/docker";
 	};
 
 	# Firewall
