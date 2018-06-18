@@ -5,22 +5,21 @@ My Config Files For Various NixOS Deployments
 ## Pull bootstrap.sh & Run Script
 
 ```bash
-curl -OLk https://gitlab.com/Wolfereign/nixos-configs/raw/master/bootstrap.sh
-bash bootstrap.sh
+curl -OLk https://gitlab.com/Wolfereign/nixos-configs/-/archive/master/nixos-configs-master.tar.gz
+tar -zxvf nixos-configs-master.tar.gz
+bash nixos-configs-master/bootstrap.sh
 ```
 
 or 
 
 ```bash
-curl -OLk https://gitlab.com/Wolfereign/nixos-configs/-/archive/master/nixos-configs-master.tar.gz
-tar -zxvf nixos-configs-master.tar.gz
+curl -Lk nixos-configs-tarball.wolfereign.com -o taball.tar.gz
+tar -zxvf tarball.tar.gz
+bash nixos-configs-master/bootstrap.sh
 ```
 
 ## To-Do
 
-- Make Re-Formatting Optional
-- Allow For Formatting Schemes Specific To Each Machine Configuration
-- Have The "Basic" Machine Copy The Configuration Instead of Link (Do Not Copy Git Repo Into Installation)?
 - Finish Home Workstation (Zaku) Configuration
 - Finish Home Server (Portland) Configuration
 - Finish Firewall/Router (Shuttle DS81) Configuration
