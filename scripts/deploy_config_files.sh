@@ -3,34 +3,27 @@
 # Error Handling
 set -euo pipefail
 
+# Install Additional Tools
+echo "Install git if missing.  This may take some time!"
+nix-env -i git
+
 # Generate Default Configs
 nixos-generate-config --root /mnt
 
+# Get Desired Machine Configuration
 echo "The following machine profiles were found; select one:"
-PS3="Input Number or 'stop': "
-select machine in basic portland shuttle-ds81 testing zaku; do
-	# leave the loop if the user says 'stop'
-	if [[ "$REPLY" == stop ]]; then 
-		exit 1 
-	fi
+select machine in ./machines/*/
 
-	# complain if no file was selected, and loop to ask again
-	if [[ "$machine" == "" ]]; then
-		echo "'$REPLY' is not a valid number"
-		continue
-	fi
+# Clone nixos-configs Repository To Installation
+git -C /mnt/etc/nixos/ clone https://gitlab.com/Wolfereign/nixos-configs.git
+chmod -R 700 /mnt/etc/nixos/nixos-configs
 
-	# now we can return the selected folder
-	echo "$machine"
-	break
-done
-
-# Copy configuration.nix
-if [ -e "../machines/${machine}/configuration.nix" ]; then
-    cp -f "../machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+# Link configuration.nix
+if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" ]; then
+    ln -rsf "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
-# Copy hardware_configuration.nix
-if [ -e "../machines/${machine}/hardware_configuration.nix" ]; then
-    cp -f "../machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+# Link hardware_configuration.nix
+if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" ]; then
+    ln -rsf "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
