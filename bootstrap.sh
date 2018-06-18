@@ -7,7 +7,7 @@ set -euo pipefail
 read -p "Do you want to format and mount the BOOT disk? This will erase the disk. (y/n) " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
-	select fbd in ./scripts/format-boot-disk-*.sh
+	select fbd in ./scripts/format-boot_disk-*.sh
 	. $fbd
 else
 	echo "Skipping Partitioning/Mounting"
@@ -19,7 +19,7 @@ read -p "Do you want to use the configuration git repository? (y/n) " -n 1 -r
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
 	# Deploy Configuration Files
-	. ./scripts/deploy-config-files.sh
+	. ./scripts/deploy-config_files.sh
 
 	# Generate users.nix (if custom config files were deployed)
 	echo "Select users.nix to generate."
@@ -34,13 +34,22 @@ then
 	echo; echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!"
 else
 	# Generate Default Configs
+	echo "Generating default config files at /mnt/etc/nixos/"
 	nixos-generate-config --root /mnt
 
+	# Review/Edit configuration.nix
+	read -p "Do you want to review/edit configuration.nix? (y/n) " -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		vim /mnt/etc/nixos/configuration.nix
+	fi
+
+	# Review/Edit hardware_configuration.nix
+	read -p "Do you want to review/edit hardware_configuration.nix? (y/n) " -n 1 -r
+	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+		vim /mnt/etc/nixos/hardware_configuration.nix
+	fi
+
 	# Install System
-	echo "Do you want to format and mount the BOOT disk? This will erase the disk."
-	select yn in "Yes" "No"
-	case $yn in
-		Yes ) nixos-install; echo; echo "All Done!! Shutdown, Remove Boot Media, and Enjoy!";;
-		No ) echo "run 'nixos-install' when you are ready.";;
-	esac
+	echo "Installing NixOS!! This will take a while."
+	nixos-install 
 fi

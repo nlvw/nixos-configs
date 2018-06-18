@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Install Additional Tools
-echo "Install git if missing.  This may take some time!"
+echo "Installing 'git' if package is missing."
 nix-env -i git
 
 # Generate Default Configs

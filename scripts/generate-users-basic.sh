@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Install Needed Packages
-echo "Installing needed packages; this could take a while."
+echo "Installing 'mkpasswd' if package is missing."
 nix-env -i mkpasswd
 
 # Create Lockdowned Folder
