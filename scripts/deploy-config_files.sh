@@ -4,7 +4,7 @@
 set -euo pipefail
 
 # Get Repository Root
-If [ ! -v RepoRoot ]; then
+if [ ! -v RepoRoot ]; then
     RepoRoot="$(dirname "$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)")"
 fi
 
