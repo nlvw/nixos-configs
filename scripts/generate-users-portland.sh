@@ -25,7 +25,7 @@ read -srp "Enter Password for '$mUser': " mPass; echo
 read -srp "Repeat Password: " mPass2; echo; echo
 [[ "$mPass" == "$mPass2" ]] || ( echo "Passwords did not match"; exit 1; )
 
-cat << EOF > /mnt/etc/nixos/private/users.nix
+cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 { config, ... }:
 {
 	# force user/group management to be immutable (this file)
