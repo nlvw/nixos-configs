@@ -11,8 +11,9 @@ read -p "Do you want to format and mount the BOOT disk? This will erase the disk
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-	select fbd in "${sroot}/scripts/format-boot_disk-*.sh"
-	. "$fbd"
+	select fbd in "${sroot}/scripts/format-boot_disk-*.sh"; do
+		. "$fbd"
+	done
 else
 	echo "Skipping Partitioning/Mounting"
 	echo "Script is proceeding with the assuption that /mnt is fully configured!!"
@@ -28,8 +29,9 @@ then
 
 	# Generate users.nix (if custom config files were deployed)
 	echo "Select users.nix to generate."
-	select usrnix in "${sroot}/scripts/generate-users-*.sh"
-	. "$usrnix"
+	select usrnix in "${sroot}/scripts/generate-users-*.sh"; do
+		. "$usrnix"
+	done
 
 	# Install System
 	echo "Installing NixOS!! This will take a while."
@@ -44,6 +46,7 @@ else
 
 	# Review/Edit configuration.nix
 	read -p "Do you want to review/edit configuration.nix? (y/n) " -n 1 -r
+	echo
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		vim /mnt/etc/nixos/configuration.nix
 	fi
