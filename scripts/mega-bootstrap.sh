@@ -114,12 +114,12 @@ chmod -R 700 /mnt/etc/nixos/nixos-configs
 
 # Link configuration.nix
 if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" ]; then
-    ln -sf "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
+    ln -rsf "/mnt/etc/nixos/nixos-configs/machines/${machine}/configuration.nix" /mnt/etc/nixos/configuration.nix
 fi
 
 # Link hardware_configuration.nix
 if [ -e "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" ]; then
-    ln -sf "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
+    ln -rsf "/mnt/etc/nixos/nixos-configs/machines/${machine}/hardware_configuration.nix" /mnt/etc/nixos/hardware_configuration.nix
 fi
 
 #################################################################################################################
