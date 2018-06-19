@@ -6,7 +6,6 @@
 	# paths in nix expressions are always relative the file which defines them
 	imports = [ 
 		../../../hardware-configuration.nix
-		../../private/hostname.nix
 		../../private/users.nix
 	];
 				
