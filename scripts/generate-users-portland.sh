@@ -42,8 +42,8 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
         uid = 1000;
         createHome = true;
         home = "/home/${mUser}";
-		hashedPassword = "$(mkpasswd -m sha-512 $(openssl rand -base64 32))";
-        extraGroups = [ "wheel" "networkmanager" "docker" "curator"];
+		hashedPassword = "$(mkpasswd -m sha-512 "$mPass")";
+        extraGroups = [ "wheel" "networkmanager" "docker" ];
 	};
 
     # Docker Media Library User
@@ -51,8 +51,8 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 		isNormalUser = true;
 		uid = 6846;
         createHome = false;
-        shell = /sbin/nologin;
-		hashedPassword = "$(mkpasswd -m sha-512 "$mPass")";
+        #shell = /sbin/nologin;
+		hashedPassword = "$(mkpasswd -m sha-512 $(openssl rand -base64 32))";
 	};
 
 }
