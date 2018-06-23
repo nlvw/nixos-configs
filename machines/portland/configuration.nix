@@ -76,23 +76,25 @@
 	# Fail2ban Service
   services.fail2ban = {
     enable = true;
-    jails.DEFAULT = ''bantime = 3600'';
+    jails.DEFAULT = ''
+      ignoreip = 127.0.0.1/8,192.168.8.0/24
+      bantime = 3600
+      maxretry = 4
+    '';
     jails.sshd = ''
       filter = sshd
-      maxretry = 4
       action = iptables[name=ssh, port=8668, protocol=tcp]
       enabled = true
     '';
     jails.sshd-dos = ''
       filter = sshd-ddos
-      maxretry = 2
       action = iptables[name=ssh, port=8668, protocol=tcp]
+      bantime = 7200
       enabled = true
     '';
     jails.port-scan = ''
       filter = port-scan
       action = iptables-allports[name=port-scan]
-      maxretry = 2
       bantime = 7200
       enabled = true
     '';
