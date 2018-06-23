@@ -8,8 +8,8 @@ echo "Installing 'mkpasswd' if package is missing."
 nix-env -i mkpasswd
 
 # Create Lockdowned Folder
-mkdir /mnt/etc/nixos/private
-chmod -R 700 /mnt/etc/nixos/private
+#mkdir /mnt/etc/nixos/private
+#chmod -R 700 /mnt/etc/nixos/private
 
 # Get Root Password
 read -srp "Enter Desired Root Password: " rPass; echo
