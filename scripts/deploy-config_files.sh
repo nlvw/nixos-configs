@@ -20,7 +20,7 @@ echo "The following machine profiles were found; select one:"
 select machine in "$RepoRoot"/machines/*/; do break; done
 
 # Clone nixos-configs Repository To Installation
-git -C /mnt/etc/nixos/ clone https://gitlab.com/Wolfereign/nixos-configs.git
+git -C /mnt/etc/nixos/ clone https://github.com/Wolfereign/nixos-configs.git 
 chmod -R 700 /mnt/etc/nixos/nixos-configs
 
 # Link configuration.nix

@@ -109,7 +109,7 @@ nix-env -i git mkpasswd
 nixos-generate-config --root /mnt
 
 # Copy Repo To Installation
-git -C /mnt/etc/nixos/ clone https://gitlab.com/Wolfereign/nixos-configs.git
+git -C /mnt/etc/nixos/ clone https://github.com/Wolfereign/nixos-configs.git 
 chmod -R 700 /mnt/etc/nixos/nixos-configs
 
 # Link configuration.nix
@@ -176,7 +176,7 @@ nixos-install --no-root-passwd
 
 # Download & Install My Dotfiles
 echo "Downloading & Installing dotfiles for ${mUser}."
-git -C "/mnt/home/${mUser}/" clone https://gitlab.com/Wolfereign/dotfiles.git
+git -C "/mnt/home/${mUser}/" clone https://github.com/Wolfereign/dotfiles.git 
 nixos-enter -c "chown -R '$mUser':users '/home/${mUser}/dotfiles'"
 nixos-enter -c "su '$mUser' -c 'bash ~/dotfiles/bootstrap.sh'"
 

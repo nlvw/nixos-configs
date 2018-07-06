@@ -5,17 +5,17 @@ My Config Files For Various NixOS Deployments
 ## Pull bootstrap.sh & Run Script
 
 ```bash
-curl -OLk https://gitlab.com/Wolfereign/nixos-configs/-/archive/master/nixos-configs-master.tar.gz
-tar -zxvf nixos-configs-master.tar.gz
-bash nixos-configs-master/bootstrap.sh
+curl -L https://github.com/Wolfereign/nixos-configs/tarball/master | tar xz
+cd Wolfe*
+bash ./bootstrap.sh
 ```
 
 or 
 
 ```bash
-curl -Lk nixos-configs-tarball.wolfereign.com -o taball.tar.gz
-tar -zxvf tarball.tar.gz
-bash nixos-configs-master/bootstrap.sh
+curl -L https://git.io/fNeXc | tar xz
+cd Wolfe*
+bash ./bootstrap.sh
 ```
 
 ## To-Do
