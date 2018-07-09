@@ -116,7 +116,20 @@
 	networking.firewall.enable = true;
 	networking.firewall.allowedTCPPorts = [ 8668 ];
 	#networking.firewall.allowedUDPPorts = [ ...];
-    
+
+	# Automatic Updates
+	system.autoUpgrade = {
+		enable = true;
+		dates = "03:00";
+	};
+
+	# Automatic Garbage Collection
+	nix.gc = {
+		automatic = true;
+		dates = "12:00";
+		options = "--delete-older-than 15";
+	};
+
 	# This value determines the NixOS release with which your system is to be
 	# compatible, in order to avoid breaking some software such as database
 	# servers. You should change this only after NixOs release notes say you
