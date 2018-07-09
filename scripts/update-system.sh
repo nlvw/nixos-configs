@@ -10,4 +10,4 @@ sudo nixos-rebuild switch --upgrade
 
 # Run Package Garbage Collection
 echo "Deleting Unused Packages"
-nix-collect-garbage --delete-older-than 15
+sudo nix-collect-garbage --delete-older-than 15
