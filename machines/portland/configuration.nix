@@ -14,7 +14,7 @@
 	boot.loader.efi.canTouchEfiVariables = true;
 		
 	# Localization
-	time.timeZone = "US/Denver";
+	time.timeZone = "America/Denver";
 	i18n = {
 		consoleFont = "roboto-mono";
 		consoleKeyMap = "us";
