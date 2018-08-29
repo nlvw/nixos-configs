@@ -25,10 +25,11 @@
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.libinput.enable = true; # touchpad support
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.windowManager = {
-    i3 = { enable = true; package = pkgs.i3-gaps; };
-    default = "i3";
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.windowManager.i3 = {
+     enable = true; 
+     package = pkgs.i3-gaps;
   };
 
   # Nvidia and Graphics
