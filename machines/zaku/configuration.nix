@@ -46,15 +46,15 @@
     packageOverrides = pkgs: rec {
 
       # Enable Unstable Channel
-      unstable = import (fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {
-        config = config.nixpkgs.config;
-      };
+      #unstable = import (fetchTarball channel:nixos-unstable) {
+      #  config = config.nixpkgs.config;
+      #};
 
       # Set Unstable Packages
-      discord = unstable.discord;
-      firefox = unstable.firefox;
-      google-chrome = unstable.google-chrome;
-      steam = unstable.steam;
+      #discord = unstable.discord;
+      #firefox = unstable.firefox;
+      #google-chrome = unstable.google-chrome;
+      #steam = unstable.steam;
 
       # Other Overrides
       polybar = pkgs.polybar.override { i3Support = true; }; 
