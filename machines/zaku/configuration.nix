@@ -21,13 +21,7 @@
     defaultLocale = "en_US.UTF-8";
   };
 
-  # Host Name
-  networking.hostName = "zaku";
-
-  # Networking
-  networking.networkmanager.enable = true;
-
-  # i3-gaps / lightdm
+  # Desktop (XServer + LightDM + i3-gaps)
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.libinput.enable = true; # touchpad support
@@ -36,19 +30,33 @@
     i3 = { enable = true; package = pkgs.i3-gaps; };
     default = "i3";
   };
-    
+
+  # Nvidia and Graphics
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.driSupport32Bit = true;
+
   # Enable Sound
   sound.enable = true;
   hardware.pulseaudio.enable = true;
-    
-  # Steam Fixes
-  hardware.opengl.driSupport32Bit = true;
   hardware.pulseaudio.support32Bit = true;
 
   # Packages
   nixpkgs.config = {
     allowUnfree = true;
     packageOverrides = pkgs: rec {
+
+      # Enable Unstable Channel
+      unstable = import (fetchTarball https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz) {
+        config = config.nixpkgs.config;
+      };
+
+      # Set Unstable Packages
+      discord = unstable.discord;
+      firefox = unstable.firefox;
+      google-chrome = unstable.google-chrome;
+      steam = unstable.steam;
+
+      # Other Overrides
       polybar = pkgs.polybar.override { i3Support = true; }; 
     };
   };
@@ -115,11 +123,9 @@
     permitRootLogin = "no";
     passwordAuthentication = false;
     extraConfig = "
-
       # Allow Local Lan to login with password authentication
       Match address 192.168.8.0/24
         PasswordAuthentication yes
-
     ";
   };
 
@@ -158,10 +164,13 @@
   # CUPS Service (Printing)
   #services.printing.enable = true; # uses CUPS
 
-  # Firewall
+  # Firewall / Networking
+  networking.hostName = "zaku";
+  networking.networkmanager.enable = true;
   networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
   networking.firewall.allowedTCPPorts = [ 22 ];
-  #networking.firewall.allowedUDPPorts = [ ...];
+  #networking.firewall.allowedUDPPorts = [  ];
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
