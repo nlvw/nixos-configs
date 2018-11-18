@@ -68,6 +68,7 @@
     compton
     deluge
     discord
+    emacs
     feh
     firefox
     gimp
@@ -76,9 +77,11 @@
     imagemagick
     libreoffice
     lxappearance
+    neovim
     networkmanagerapplet
     obs-studio
     pango
+    pandoc
     polybar
     psmisc
     qutebrowser
@@ -105,6 +108,8 @@
       defaultFonts.serif = [ "roboto-slab" ];
     };
     fonts = with pkgs; [
+      nerdfonts
+      source-code-pro
       roboto
       roboto-mono
       roboto-slab
@@ -161,6 +166,12 @@
     [Definition]
     failregex = rejected connection: .* SRC=<HOST>
   '';
+
+  # Docker Service
+	virtualisation.docker = {
+		enable = true;
+		enableOnBoot = true;
+	};
 
   # CUPS Service (Printing)
   #services.printing.enable = true; # uses CUPS
