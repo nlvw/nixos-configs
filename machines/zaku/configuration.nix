@@ -25,11 +25,10 @@
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.libinput.enable = true; # touchpad support
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.windowManager.i3 = {
-     enable = true; 
-     package = pkgs.i3-gaps;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.windowManager = {
+     i3 = {enable = true; package = pkgs.i3-gaps; };
+     default = "i3";
   };
 
   # Nvidia and Graphics
@@ -64,6 +63,9 @@
 
   environment.systemPackages = with pkgs; [
     audacity
+    breeze-gtk
+    breeze-qt5
+    breeze-icons
     clipit
     compton
     deluge
@@ -82,16 +84,21 @@
     obs-studio
     pango
     pandoc
+    pamixer
+    pasystray
+    pavucontrol
     polybar
     psmisc
     qutebrowser
     ranger
     rofi
     scrot
+    spectacle
     steam
     termite
     thunderbird
     tmux
+    unclutter
     unzip
     vim
     vscode
