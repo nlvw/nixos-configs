@@ -70,6 +70,7 @@
     compton
     deluge
     discord
+    dunst
     emacs
     feh
     firefox
