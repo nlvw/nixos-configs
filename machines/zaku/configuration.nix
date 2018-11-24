@@ -74,10 +74,15 @@
     emacs
     feh
     firefox
+    fzf
     gimp
     git
+    gnupg
     google-chrome
+    htop
+    iotop
     imagemagick
+    libnotify
     libreoffice
     lxappearance
     neovim
@@ -94,6 +99,7 @@
     ranger
     rofi
     scrot
+    shellcheck
     spectacle
     steam
     termite
@@ -116,11 +122,13 @@
       defaultFonts.serif = [ "roboto-slab" ];
     };
     fonts = with pkgs; [
+      corefonts
       nerdfonts
       source-code-pro
       roboto
       roboto-mono
       roboto-slab
+      ubuntu_font_family
     ];
   };
 						
