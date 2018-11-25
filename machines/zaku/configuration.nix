@@ -129,6 +129,7 @@
     vim
     vscode
     wget
+    zathura
   ];
 	
   # Fonts
