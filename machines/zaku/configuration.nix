@@ -25,10 +25,28 @@
   services.xserver.enable = true;
   services.xserver.layout = "us";
   services.xserver.libinput.enable = true; # touchpad support
-  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.xterm.enable = false;
+  services.xserver.desktopManager.default = "none";
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    background = "/etc/nixos/nixos-configs/resources/images/wall2.jpg";
+    greeters.gtk = {
+      enable = true;
+      clock-format = "%a, %d %b %y, %I:%M %p";
+      indicators = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~a11y" "~power" ];
+      extraConfig = "
+        default-user-image = /etc/nixos/nixos-configs/resources/images/nixos-logo-only-hires.png
+        font-name = Roboto Mono 16
+        a11y-states=+font
+      ";
+    };
+  };
   services.xserver.windowManager = {
-     i3 = {enable = true; package = pkgs.i3-gaps; };
-     default = "i3";
+    i3 = {
+      enable = true; 
+      package = pkgs.i3-gaps; 
+    };
+    default = "i3";
   };
 
   # Nvidia and Graphics
@@ -95,6 +113,7 @@
     pavucontrol
     polybar
     psmisc
+    qt5ct
     qutebrowser
     ranger
     rofi
@@ -124,6 +143,7 @@
     fonts = with pkgs; [
       corefonts
       nerdfonts
+      powerline-fonts
       source-code-pro
       roboto
       roboto-mono
