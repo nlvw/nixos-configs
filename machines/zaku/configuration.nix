@@ -80,50 +80,51 @@
   };
 
   environment.systemPackages = with pkgs; [
-    breeze-gtk
-    breeze-qt5
-    breeze-icons
-    clipit
-    compton
-    deluge
-    discord
-    dunst
-    feh
-    firefox
-    fzf
-    gimp
-    git
-    gnupg
-    google-chrome
-    htop
-    iotop
-    imagemagick
-    libnotify
-    libreoffice
-    neovim
-    networkmanagerapplet
-    pango
-    pandoc
-    pamixer
-    pasystray
-    pavucontrol
-    polybar
-    psmisc
-    qt5ct
-    qutebrowser
-    ranger
-    rofi
-    scrot
-    shellcheck
-    steam
-    termite
-    tmux
-    unclutter
-    unzip
-    vim
-    vscode
-    wget
-    zathura
+    breeze-gtk			# Theme
+    breeze-qt5			# Theme
+    breeze-icons		# Theme
+    clipit			# Clipboard Manager
+    compton			# Tranparency for I3
+    copyq			# Clipboard Manager
+    deluge			# Torrent Client/Daemon
+    discord			# Chat/Voip
+    dunst			# Notification Daemon
+    feh				# Image Viewer (i3 background)
+    firefox			# Browser (Secondary)
+    fzf				# Fuzzy File Finder (Vim/Ranger)
+    gimp			# Image Editor
+    git				# Version Control CLI
+    gnupg			# Encryption Software
+    google-chrome		# Browser (Primary)
+    htop			# CLI Tool (Processes)
+    iotop			# CLI Tool (Processes)
+    imagemagick			# CLI Image Processor (used with lockscreen)
+    libnotify			# Notification Library (Dunst Dependancy)
+    libreoffice			# Office Document Suite
+    neovim			# Vim alternative/rewrite
+    networkmanagerapplet	# Systray Applet for Network Manager
+    pango			# Text Layout Engine Library...
+    pandoc			# Document Conversion
+    pamixer			# Pulse Audio Tool
+    pasystray			# Pusle Audio System Tray App
+    pavucontrol			# Pulse AUdio Tool
+    polybar			# Status Bar (i3)
+    psmisc			# Multi Tool Package Concerning Proc (fuser, kallall,pstree, prtstat)
+    qt5ct			# QT Themeing Daemon (Because QT doesn't have a file config for themes...)
+    qutebrowser			# Browser (Keyboard Focused / Lightweight)
+    ranger			# CLI File Broweser
+    rofi			# Menu App (Windows Switcher, App Launcher, and demenu replacement)
+    scrot			# Screenshot Capture Utility
+    shellcheck			# Bash/SH Linting (Vim/Neovim Plugin Depend)
+    steam			# Games!
+    termite			# Terminal Emulator
+    tmux			# Screen Multiplexer
+    unclutter			# Hide Mouse When Idle Daemon
+    unzip			# Zip Archive Handler
+    vim				# CLI Text Editor / IDE
+    vscode			# GUI Text Editor / IDE
+    wget			# Easy Curl Alternative
+    zathura			# PDF Viewer
   ];
 	
   # Fonts
@@ -199,10 +200,10 @@
   '';
 
   # Docker Service
-	virtualisation.docker = {
-		enable = true;
-		enableOnBoot = true;
-	};
+  virtualisation.docker = {
+    enable = true;
+    enableOnBoot = true;
+  };
 
   # CUPS Service (Printing)
   #services.printing.enable = true; # uses CUPS
