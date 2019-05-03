@@ -80,7 +80,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    audacity
     breeze-gtk
     breeze-qt5
     breeze-icons
@@ -89,7 +88,6 @@
     deluge
     discord
     dunst
-    emacs
     feh
     firefox
     fzf
@@ -102,10 +100,8 @@
     imagemagick
     libnotify
     libreoffice
-    lxappearance
     neovim
     networkmanagerapplet
-    obs-studio
     pango
     pandoc
     pamixer
@@ -119,10 +115,8 @@
     rofi
     scrot
     shellcheck
-    spectacle
     steam
     termite
-    thunderbird
     tmux
     unclutter
     unzip
