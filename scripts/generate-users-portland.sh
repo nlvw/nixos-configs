@@ -34,6 +34,8 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
 	# Root
 	users.users.root = {
 		hashedPassword = "$(mkpasswd -m sha-512 "$rPass")";
+		subUidRanges = [{ startUid = 100000; count = 65536; }];
+		subGidRanges = [{ startGid = 100000; count = 65536; }];
 	};
 
 	# Main user generated from bootstrap.sh
@@ -44,16 +46,8 @@ cat << EOF > /mnt/etc/nixos/nixos-configs/private/users.nix
         home = "/home/${mUser}";
 		hashedPassword = "$(mkpasswd -m sha-512 "$mPass")";
         extraGroups = [ "wheel" "networkmanager" "docker" ];
+		subUidRanges = [{ startUid = 165536; count = 65536; }];
+		subGidRanges = [{ startGid = 165536; count = 65536; }];
 	};
-
-    # Docker Media Library User
-    users.users.curator = {
-		isNormalUser = true;
-		uid = 6846;
-        createHome = false;
-        #shell = /sbin/nologin;
-		hashedPassword = "$(mkpasswd -m sha-512 $(openssl rand -base64 32))";
-	};
-
 }
 EOF
