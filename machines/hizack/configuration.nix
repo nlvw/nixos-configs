@@ -156,8 +156,8 @@
 
   # started in user sessions (login config).
   programs.bash.enableCompletion = true;
-  programs.mtr.enable = true;
-  programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
+  #programs.mtr.enable = true;
+  #programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
   programs.ssh.startAgent = true;
 
   # OpenSSH Service
