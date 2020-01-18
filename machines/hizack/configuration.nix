@@ -30,21 +30,21 @@
     desktopManager = {
       xterm.enable = false;
       default = "none";
-      lightdm = {
+    };
+
+    displayManager.lightdm = {
+      enable = true;
+      background = "/etc/nixos/nixos-configs/resources/images/wall2.jpg";
+      greeters.gtk = {
         enable = true;
-        background = "/etc/nixos/nixos-configs/resources/images/wall2.jpg";
-        greeters.gtk = {
-          enable = true;
-          clock-format = "%a, %d %b %y, %I:%M %p";
-          indicators = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~a11y" "~power" ];
-          extraConfig = "
-            default-user-image = /etc/nixos/nixos-configs/resources/images/nixos-logo-only-hires.png
-            font-name = Roboto Mono 16
-            a11y-states=+font
-          ";
-        };
+        clock-format = "%a, %d %b %y, %I:%M %p";
+        indicators = [ "~host" "~spacer" "~clock" "~spacer" "~session" "~a11y" "~power" ];
+        extraConfig = "
+          default-user-image = /etc/nixos/nixos-configs/resources/images/nixos-logo-only-hires.png
+          font-name = Roboto Mono 16
+          a11y-states=+font";
       };
-    }; # end desktopManager
+    };
 
     windowManager = {
       i3 = {
